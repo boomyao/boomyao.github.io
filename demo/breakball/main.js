@@ -40,6 +40,11 @@ const BreakBall = function () {
 
   this.mouseEngine = buyAMouseEngine('mousemove')
   this.mouseEngine.config((e) => {
+    if (isTouchable() && e.touches) {
+      this.mouseEngine.pos[0] = e.touches[0].clientX;
+      this.mouseEngine.pos[1] = e.touches[0].clientY;
+      return;
+    }
     this.mouseEngine.pos[0] = e.clientX;
     this.mouseEngine.pos[1] = e.clientY;
   })
@@ -94,8 +99,15 @@ function buyAMouseEngine(type) {
     pos: [0, 0],
     config: function (action) {
       window.addEventListener(type, action);
+      if (isTouchable()) {
+        window.addEventListener("touchmove", action)
+      }
     }
   }
+}
+
+function isTouchable() {
+  return !!navigator.userAgent.match(/(Android|Mobile)/g)
 }
 
 window.onload = function () {
