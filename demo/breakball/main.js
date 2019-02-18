@@ -41,6 +41,7 @@ const BreakBall = function () {
   this.mouseEngine = buyAMouseEngine('mousemove')
   this.mouseEngine.config((e) => {
     if (isTouchable() && e.touches) {
+      e.preventDefault();
       this.mouseEngine.pos[0] = e.touches[0].clientX;
       this.mouseEngine.pos[1] = e.touches[0].clientY;
       return;
@@ -100,7 +101,7 @@ function buyAMouseEngine(type) {
     config: function (action) {
       window.addEventListener(type, action);
       if (isTouchable()) {
-        window.addEventListener("touchmove", action)
+        window.addEventListener("touchmove", action, {passive: false})
       }
     }
   }
