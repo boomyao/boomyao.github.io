@@ -2,10 +2,15 @@
 import PostCard from '../components/PostCard.astro';
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { SITE_DESCRIPTION, SITE_TAGLINE, SITE_TITLE } from '../consts';
-import { getLatestPublishedArticles, getLatestPublishedLogs } from '../lib/content';
+import {
+	getLatestPublishedArticles,
+	getLatestPublishedLogs,
+	getLatestPublishedNotes,
+} from '../lib/content';
 
 const articles = await getLatestPublishedArticles(3);
 const logs = await getLatestPublishedLogs(5);
+const notes = await getLatestPublishedNotes(6);
 ---
 
 <SiteLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
@@ -13,7 +18,7 @@ const logs = await getLatestPublishedLogs(5);
 		<p class="eyebrow">{SITE_TAGLINE}</p>
 		<h1>{SITE_TITLE}</h1>
 		<p class="intro-text">
-			这里现在拆成两条线：文章用于对外输出，日志用于记录每天的推进、实验和回看。
+			这里现在拆成三条线：文章用于对外输出，日志用于记录每天推进，小记用于随时收住还没长成文章的灵感、判断和句子。
 		</p>
 	</section>
 
@@ -29,6 +34,12 @@ const logs = await getLatestPublishedLogs(5);
 			<h2>日志</h2>
 			<p class="section-copy">记录每日产出、阶段推进和给自己的复盘材料。</p>
 			<a class="section-link" href="/blog/logs">进入日志</a>
+		</article>
+		<article class="section-panel">
+			<p class="eyebrow">Notes</p>
+			<h2>小记</h2>
+			<p class="section-copy">收纳即时灵感、半成品判断和一闪而过但值得留下的片段。</p>
+			<a class="section-link" href="/blog/notes">进入小记</a>
 		</article>
 	</section>
 
@@ -58,6 +69,21 @@ const logs = await getLatestPublishedLogs(5);
 		) : (
 			<div class="empty-state">
 				<h3>还没有可发布的日志</h3>
+			</div>
+		)}
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<h2>最新小记</h2>
+		</div>
+		{notes.length > 0 ? (
+			<div class="post-list">
+				{notes.map((post) => <PostCard post={post} hrefBase="/blog/notes" tagsLabel="小记标签" />)}
+			</div>
+		) : (
+			<div class="empty-state">
+				<h3>还没有可发布的小记</h3>
 			</div>
 		)}
 	</section>

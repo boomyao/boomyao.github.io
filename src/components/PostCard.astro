@@ -1,9 +1,9 @@
 ---
-import type { ArticleEntry, LogEntry } from '../lib/content';
+import type { ArticleEntry, LogEntry, NoteEntry } from '../lib/content';
 import FormattedDate from './FormattedDate.astro';
 
 interface Props {
-	post: ArticleEntry | LogEntry;
+	post: ArticleEntry | LogEntry | NoteEntry;
 	hrefBase: `/blog/${string}`;
 	tagsLabel?: string;
 }

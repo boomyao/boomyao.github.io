@@ -1,0 +1,29 @@
+---
+import PostCard from '../../../components/PostCard.astro';
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import { getPublishedNotes } from '../../../lib/content';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../../consts';
+
+const notes = await getPublishedNotes();
+---
+
+<SiteLayout title={`${SITE_TITLE} | 小记`} description={SITE_DESCRIPTION}>
+	<section class="section-block">
+		<div class="section-heading">
+			<p class="eyebrow">Notes</p>
+			<h1>小记</h1>
+			<p class="intro-text">这里放那些不想等到晚上复盘、也还没必要写成长文的即时灵感与判断。</p>
+		</div>
+		{
+			notes.length > 0 ? (
+				<div class="post-list">
+					{notes.map((post) => <PostCard post={post} hrefBase="/blog/notes" tagsLabel="小记标签" />)}
+				</div>
+			) : (
+				<div class="empty-state">
+					<h3>还没有可发布的小记</h3>
+				</div>
+			)
+		}
+	</section>
+</SiteLayout>

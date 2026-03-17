@@ -1,8 +1,9 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 
-export type PublishedCollection = 'articles' | 'logs';
+export type PublishedCollection = 'articles' | 'logs' | 'notes';
 export type ArticleEntry = CollectionEntry<'articles'>;
 export type LogEntry = CollectionEntry<'logs'>;
+export type NoteEntry = CollectionEntry<'notes'>;
 
 async function getPublishedEntries<T extends PublishedCollection>(collection: T) {
 	const entries = await getCollection(collection, ({ data }) => !data.draft);
@@ -16,6 +17,10 @@ export async function getPublishedArticles() {
 
 export async function getPublishedLogs() {
 	return getPublishedEntries('logs');
+}
+
+export async function getPublishedNotes() {
+	return getPublishedEntries('notes');
 }
 
 export async function getFeaturedArticles() {
@@ -34,4 +39,10 @@ export async function getLatestPublishedLogs(limit: number) {
 	const logs = await getPublishedLogs();
 
 	return logs.slice(0, limit);
+}
+
+export async function getLatestPublishedNotes(limit: number) {
+	const notes = await getPublishedNotes();
+
+	return notes.slice(0, limit);
 }

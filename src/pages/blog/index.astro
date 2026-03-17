@@ -1,20 +1,25 @@
 ---
 import PostCard from '../../components/PostCard.astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
-import { getLatestPublishedArticles, getLatestPublishedLogs } from '../../lib/content';
+import {
+	getLatestPublishedArticles,
+	getLatestPublishedLogs,
+	getLatestPublishedNotes,
+} from '../../lib/content';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 const articles = await getLatestPublishedArticles(3);
 const logs = await getLatestPublishedLogs(3);
+const notes = await getLatestPublishedNotes(4);
 ---
 
 <SiteLayout title={`${SITE_TITLE} | 博客`} description={SITE_DESCRIPTION}>
 	<section class="section-block">
 		<div class="section-heading">
 			<p class="eyebrow">Blog Structure</p>
-			<h1>博客现在分成两条流</h1>
+			<h1>博客现在分成三条流</h1>
 			<p class="intro-text">
-				文章用于输出相对稳定的内容，日志用于沉淀每日推进与自我回顾。两个栏目共享同一套写作体验，但承担不同节奏。
+				文章用于输出相对稳定的内容，日志用于沉淀每日推进与自我回顾，小记则承接那些当下就该被留下的灵感与判断。三个栏目共享同一套写作体验，但承担不同节奏。
 			</p>
 		</div>
 	</section>
@@ -48,6 +53,22 @@ const logs = await getLatestPublishedLogs(3);
 			) : (
 				<div class="empty-state">
 					<h3>还没有可发布的日志</h3>
+				</div>
+			)}
+		</article>
+
+		<article class="section-panel">
+			<p class="eyebrow">Notes</p>
+			<h2>小记</h2>
+			<p class="section-copy">适合放即时灵感、未成形观点、短句和那些现在就想抓住的念头。</p>
+			<p><a class="section-link" href="/blog/notes">查看全部小记</a></p>
+			{notes.length > 0 ? (
+				<div class="post-list compact-list">
+					{notes.map((post) => <PostCard post={post} hrefBase="/blog/notes" tagsLabel="小记标签" />)}
+				</div>
+			) : (
+				<div class="empty-state">
+					<h3>还没有可发布的小记</h3>
 				</div>
 			)}
 		</article>
