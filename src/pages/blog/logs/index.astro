@@ -1,0 +1,29 @@
+---
+import PostCard from '../../../components/PostCard.astro';
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import { getPublishedLogs } from '../../../lib/content';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../../consts';
+
+const logs = await getPublishedLogs();
+---
+
+<SiteLayout title={`${SITE_TITLE} | 日志`} description={SITE_DESCRIPTION}>
+	<section class="section-block">
+		<div class="section-heading">
+			<p class="eyebrow">Logs</p>
+			<h1>日志</h1>
+			<p class="intro-text">这里放每天的推进、产出和给自己回看的工作痕迹。</p>
+		</div>
+		{
+			logs.length > 0 ? (
+				<div class="post-list">
+					{logs.map((post) => <PostCard post={post} hrefBase="/blog/logs" tagsLabel="日志标签" />)}
+				</div>
+			) : (
+				<div class="empty-state">
+					<h3>还没有可发布的日志</h3>
+				</div>
+			)
+		}
+	</section>
+</SiteLayout>

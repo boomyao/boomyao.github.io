@@ -1,0 +1,64 @@
+---
+import PostCard from '../components/PostCard.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { SITE_DESCRIPTION, SITE_TAGLINE, SITE_TITLE } from '../consts';
+import { getLatestPublishedArticles, getLatestPublishedLogs } from '../lib/content';
+
+const articles = await getLatestPublishedArticles(3);
+const logs = await getLatestPublishedLogs(5);
+---
+
+<SiteLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<section class="section-block intro-block">
+		<p class="eyebrow">{SITE_TAGLINE}</p>
+		<h1>{SITE_TITLE}</h1>
+		<p class="intro-text">
+			这里现在拆成两条线：文章用于对外输出，日志用于记录每天的推进、实验和回看。
+		</p>
+	</section>
+
+	<section class="section-block section-grid">
+		<article class="section-panel">
+			<p class="eyebrow">Articles</p>
+			<h2>文章</h2>
+			<p class="section-copy">放长期有效的表达、判断和结构化输出。</p>
+			<a class="section-link" href="/blog/articles">进入文章</a>
+		</article>
+		<article class="section-panel">
+			<p class="eyebrow">Logs</p>
+			<h2>日志</h2>
+			<p class="section-copy">记录每日产出、阶段推进和给自己的复盘材料。</p>
+			<a class="section-link" href="/blog/logs">进入日志</a>
+		</article>
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<h2>最新文章</h2>
+		</div>
+		{articles.length > 0 ? (
+			<div class="post-list">
+				{articles.map((post) => <PostCard post={post} hrefBase="/blog/articles" tagsLabel="文章标签" />)}
+			</div>
+		) : (
+			<div class="empty-state">
+				<h3>还没有可发布的文章</h3>
+			</div>
+		)}
+	</section>
+
+	<section class="section-block">
+		<div class="section-heading">
+			<h2>最新日志</h2>
+		</div>
+		{logs.length > 0 ? (
+			<div class="post-list">
+				{logs.map((post) => <PostCard post={post} hrefBase="/blog/logs" tagsLabel="日志标签" />)}
+			</div>
+		) : (
+			<div class="empty-state">
+				<h3>还没有可发布的日志</h3>
+			</div>
+		)}
+	</section>
+</SiteLayout>

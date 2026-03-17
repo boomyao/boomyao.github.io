@@ -1,0 +1,42 @@
+---
+import FormattedDate from '../components/FormattedDate.astro';
+import SiteLayout from './SiteLayout.astro';
+
+interface Props {
+	title: string;
+	description: string;
+	pubDate: Date;
+	updatedDate?: Date;
+	tags: string[];
+	sectionLabel?: string;
+}
+
+const { title, description, pubDate, updatedDate, tags, sectionLabel } = Astro.props;
+---
+
+<SiteLayout title={title} description={description}>
+	<article class="post-shell prose">
+		<header class="post-header">
+			{sectionLabel && <p class="eyebrow">{sectionLabel}</p>}
+			<h1>{title}</h1>
+			<p class="post-description">{description}</p>
+			<div class="post-meta">
+				<span><FormattedDate date={pubDate} /></span>
+				{updatedDate && (
+					<span>
+						更新于
+						<FormattedDate date={updatedDate} />
+					</span>
+				)}
+			</div>
+			{tags.length > 0 && (
+				<ul class="tag-list" aria-label="文章标签">
+					{tags.map((tag) => (
+						<li>{tag}</li>
+					))}
+				</ul>
+			)}
+		</header>
+		<slot />
+	</article>
+</SiteLayout>

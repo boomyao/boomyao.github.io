@@ -1,0 +1,29 @@
+---
+import type { ArticleEntry, LogEntry } from '../lib/content';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+	post: ArticleEntry | LogEntry;
+	hrefBase: `/blog/${string}`;
+	tagsLabel?: string;
+}
+
+const { post, hrefBase, tagsLabel = '标签' } = Astro.props;
+---
+
+<article class="post-card">
+	<div class="meta">
+		<FormattedDate date={post.data.pubDate} />
+		{post.data.tags.length > 0 && (
+			<ul class="tags" aria-label={tagsLabel}>
+				{post.data.tags.map((tag) => (
+					<li>{tag}</li>
+				))}
+			</ul>
+		)}
+	</div>
+	<h3>
+		<a href={`${hrefBase}/${post.id}/`}>{post.data.title}</a>
+	</h3>
+	<p class="post-card-description">{post.data.description}</p>
+</article>

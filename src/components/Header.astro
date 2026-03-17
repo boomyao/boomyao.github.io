@@ -1,0 +1,76 @@
+---
+import { SITE_TITLE } from '../consts';
+import HeaderLink from './HeaderLink.astro';
+---
+
+<header>
+	<nav>
+		<div class="brand">
+			<a class="brand-link" href="/">{SITE_TITLE}</a>
+			<p>Scaffold externalization, for now</p>
+		</div>
+		<div class="internal-links">
+			<HeaderLink href="/">首页</HeaderLink>
+			<HeaderLink href="/blog/articles">文章</HeaderLink>
+			<HeaderLink href="/blog/logs">日志</HeaderLink>
+		</div>
+	</nav>
+</header>
+<style>
+	header {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		padding: 1rem 1.5rem;
+		backdrop-filter: blur(18px);
+		background: rgba(245, 240, 232, 0.82);
+		border-bottom: 1px solid rgba(53, 40, 33, 0.08);
+	}
+
+	nav {
+		max-width: 1120px;
+		margin: 0 auto;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.5rem;
+	}
+
+	.brand-link,
+	.brand-link.active {
+		text-decoration: none;
+		font-family: var(--font-display);
+		font-size: 1.2rem;
+		color: var(--ink-strong);
+		letter-spacing: 0.04em;
+	}
+
+	.brand p {
+		margin: 0.2rem 0 0;
+		font-size: 0.82rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	.internal-links {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+	}
+
+	@media (max-width: 720px) {
+		header {
+			padding: 1rem;
+		}
+
+		nav {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+
+		.internal-links {
+			flex-wrap: wrap;
+		}
+	}
+</style>

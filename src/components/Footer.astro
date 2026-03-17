@@ -1,0 +1,20 @@
+---
+import { AUTHOR_NAME } from '../consts';
+
+const today = new Date();
+---
+
+<footer>
+	<p>© {today.getFullYear()} {AUTHOR_NAME}</p>
+</footer>
+<style>
+	footer {
+		padding: 3rem 1rem 5rem;
+		color: var(--ink-soft);
+		text-align: center;
+	}
+
+	p {
+		margin: 0.35rem 0;
+	}
+</style>

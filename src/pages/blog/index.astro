@@ -1,0 +1,55 @@
+---
+import PostCard from '../../components/PostCard.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { getLatestPublishedArticles, getLatestPublishedLogs } from '../../lib/content';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+
+const articles = await getLatestPublishedArticles(3);
+const logs = await getLatestPublishedLogs(3);
+---
+
+<SiteLayout title={`${SITE_TITLE} | 博客`} description={SITE_DESCRIPTION}>
+	<section class="section-block">
+		<div class="section-heading">
+			<p class="eyebrow">Blog Structure</p>
+			<h1>博客现在分成两条流</h1>
+			<p class="intro-text">
+				文章用于输出相对稳定的内容，日志用于沉淀每日推进与自我回顾。两个栏目共享同一套写作体验，但承担不同节奏。
+			</p>
+		</div>
+	</section>
+
+	<section class="section-block section-grid">
+		<article class="section-panel">
+			<p class="eyebrow">Articles</p>
+			<h2>文章</h2>
+			<p class="section-copy">适合放完成度更高、希望被持续引用和复读的内容。</p>
+			<p><a class="section-link" href="/blog/articles">查看全部文章</a></p>
+			{articles.length > 0 ? (
+				<div class="post-list compact-list">
+					{articles.map((post) => <PostCard post={post} hrefBase="/blog/articles" tagsLabel="文章标签" />)}
+				</div>
+			) : (
+				<div class="empty-state">
+					<h3>还没有可发布的文章</h3>
+				</div>
+			)}
+		</article>
+
+		<article class="section-panel">
+			<p class="eyebrow">Logs</p>
+			<h2>日志</h2>
+			<p class="section-copy">适合放每日产出、实验记录、进度痕迹和复盘线索。</p>
+			<p><a class="section-link" href="/blog/logs">查看全部日志</a></p>
+			{logs.length > 0 ? (
+				<div class="post-list compact-list">
+					{logs.map((post) => <PostCard post={post} hrefBase="/blog/logs" tagsLabel="日志标签" />)}
+				</div>
+			) : (
+				<div class="empty-state">
+					<h3>还没有可发布的日志</h3>
+				</div>
+			)}
+		</article>
+	</section>
+</SiteLayout>
