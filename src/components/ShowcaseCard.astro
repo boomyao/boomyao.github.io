@@ -1,0 +1,56 @@
+---
+import type { ShowcaseEntry } from '../lib/content';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+	showcase: ShowcaseEntry;
+}
+
+const { showcase } = Astro.props;
+---
+
+<article class="showcase-card">
+	<div class="meta">
+		<FormattedDate date={showcase.data.pubDate} />
+		{showcase.data.tags.length > 0 && (
+			<ul class="tags" aria-label="标签">
+				{showcase.data.tags.map((tag) => (
+					<li>{tag}</li>
+				))}
+			</ul>
+		)}
+	</div>
+	<h3>
+		<a href={showcase.data.url} target="_blank" rel="noopener">{showcase.data.title}</a>
+	</h3>
+	<p class="post-card-description">{showcase.data.description}</p>
+	<a class="showcase-link" href={showcase.data.url} target="_blank" rel="noopener">
+		打开体验 →
+	</a>
+</article>
+
+<style>
+	.showcase-card {
+		padding: 1.25rem 1.35rem;
+		background: var(--surface);
+		border: 1px solid var(--line);
+		border-radius: 0.9rem;
+	}
+
+	.showcase-card h3 {
+		margin-bottom: 0.4rem;
+	}
+
+	.showcase-card h3 a {
+		text-decoration: none;
+	}
+
+	.showcase-link {
+		display: inline-flex;
+		align-items: center;
+		margin-top: 0.5rem;
+		font-family: var(--font-ui);
+		font-size: 0.9rem;
+		text-decoration: none;
+	}
+</style>

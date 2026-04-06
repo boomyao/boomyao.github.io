@@ -1,0 +1,29 @@
+---
+import ShowcaseCard from '../../components/ShowcaseCard.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { getPublishedShowcases } from '../../lib/content';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+
+const showcases = await getPublishedShowcases();
+---
+
+<SiteLayout title={`${SITE_TITLE} | 作品`} description={SITE_DESCRIPTION}>
+	<section class="section-block">
+		<div class="section-heading">
+			<p class="eyebrow">Showcases</p>
+			<h1>作品</h1>
+			<p class="intro-text">一些 H5 小游戏、互动页面和实验性的前端作品。</p>
+		</div>
+		{
+			showcases.length > 0 ? (
+				<div class="post-list">
+					{showcases.map((s) => <ShowcaseCard showcase={s} />)}
+				</div>
+			) : (
+				<div class="empty-state">
+					<h3>还没有作品</h3>
+				</div>
+			)
+		}
+	</section>
+</SiteLayout>

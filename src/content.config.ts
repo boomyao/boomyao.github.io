@@ -47,4 +47,18 @@ const notes = defineCollection({
 		}),
 });
 
-export const collections = { articles, logs, notes };
+const showcases = defineCollection({
+	loader: glob({ base: './src/content/showcases', pattern: '**/*.{md,mdx}' }),
+	schema: ({ image }) =>
+		z.object({
+			title: z.string(),
+			description: z.string(),
+			pubDate: z.coerce.date(),
+			draft: z.boolean().default(false),
+			tags: z.array(z.string()).default([]),
+			url: z.string(),
+			cover: z.optional(image()),
+		}),
+});
+
+export const collections = { articles, logs, notes, showcases };

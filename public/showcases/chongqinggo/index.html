@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>重庆48小时漫游记</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0f0f1a;--card:#1a1a2e;--accent:#ff6b35;--red:#e63946;
+  --gold:#ffd166;--blue:#118ab2;--green:#06d6a0;--text:#f1faee;
+  --dim:#8d99ae;--card-r:16px;
+}
+html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);-webkit-tap-highlight-color:transparent;user-select:none;}
+#app{height:100%;width:100%;position:relative;overflow:hidden;}
+
+/* ===== Screens ===== */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;transition:opacity .5s,transform .5s;opacity:0;pointer-events:none;transform:scale(.96);}
+.screen.active{opacity:1;pointer-events:auto;transform:scale(1);}
+
+/* ===== Title Screen ===== */
+#title{justify-content:flex-end;align-items:center;padding:40px 24px 60px;text-align:center;background:linear-gradient(180deg,#0a0a1a 0%,#1a1030 40%,#2d1b4e 70%,#4a2068 100%);}
+.title-top{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;}
+.city-scape{position:relative;width:100%;max-width:360px;height:120px;margin-bottom:20px;}
+.building{position:absolute;bottom:0;background:#2a2040;border-radius:4px 4px 0 0;}
+.building::after{content:'';position:absolute;width:4px;height:4px;background:var(--gold);border-radius:50%;opacity:.7;animation:twinkle 2s infinite alternate;}
+.b1{left:10%;width:30px;height:60px;}.b1::after{top:12px;left:8px;}
+.b2{left:20%;width:22px;height:90px;background:#352a50;}.b2::after{top:20px;left:6px;animation-delay:.3s;}
+.b3{left:30%;width:40px;height:70px;}.b3::after{top:15px;left:18px;animation-delay:.7s;}
+.b4{left:42%;width:18px;height:105px;background:#3d2d5c;}.b4::after{top:8px;left:5px;animation-delay:1s;}
+.b5{left:50%;width:35px;height:80px;}.b5::after{top:25px;left:12px;animation-delay:.5s;}
+.b6{left:62%;width:25px;height:95px;background:#352a50;}.b6::after{top:10px;left:10px;animation-delay:1.2s;}
+.b7{left:72%;width:38px;height:65px;}.b7::after{top:18px;left:20px;animation-delay:.8s;}
+.b8{left:83%;width:20px;height:85px;background:#3d2d5c;}.b8::after{top:14px;left:7px;animation-delay:.4s;}
+.bridge{position:absolute;bottom:0;left:5%;right:5%;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.3;}
+.river{position:absolute;bottom:-5px;left:0;right:0;height:20px;background:linear-gradient(180deg,rgba(17,138,178,.2),transparent);}
+@keyframes twinkle{0%{opacity:.3}100%{opacity:1}}
+.title-emoji{font-size:48px;margin-bottom:8px;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+#title h1{font-size:32px;font-weight:800;letter-spacing:2px;margin-bottom:8px;background:linear-gradient(135deg,var(--gold),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+#title .sub{color:var(--dim);font-size:14px;margin-bottom:6px;}
+#title .sub2{color:var(--dim);font-size:12px;margin-bottom:32px;opacity:.7;}
+.start-btn{padding:16px 48px;font-size:18px;font-weight:700;border:none;border-radius:50px;background:linear-gradient(135deg,var(--accent),var(--red));color:#fff;cursor:pointer;letter-spacing:2px;box-shadow:0 4px 24px rgba(255,107,53,.4);transition:transform .2s,box-shadow .2s;}
+.start-btn:active{transform:scale(.95);box-shadow:0 2px 12px rgba(255,107,53,.3);}
+.weather-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:20px;background:rgba(255,255,255,.08);font-size:12px;color:var(--dim);margin-bottom:24px;}
+
+/* ===== Game Screen ===== */
+#game{background:var(--bg);}
+.game-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;position:relative;z-index:10;}
+.day-label{font-size:12px;color:var(--dim);font-weight:600;letter-spacing:1px;}
+.stamp-btn{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;background:rgba(255,209,102,.12);border:1px solid rgba(255,209,102,.2);color:var(--gold);font-size:13px;font-weight:600;cursor:pointer;}
+.stamp-btn .count{background:var(--gold);color:var(--bg);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;}
+.scene-area{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:0 16px 100px;}
+.scene-area::-webkit-scrollbar{display:none;}
+
+/* Scene Cards */
+.scene-card{background:var(--card);border-radius:var(--card-r);margin-bottom:16px;overflow:hidden;animation:cardIn .4s ease-out both;}
+@keyframes cardIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.scene-card:nth-child(2){animation-delay:.1s;}
+.scene-card:nth-child(3){animation-delay:.2s;}
+.scene-card:nth-child(4){animation-delay:.3s;}
+.scene-card:nth-child(5){animation-delay:.4s;}
+.scene-hero{position:relative;padding:28px 20px 20px;overflow:hidden;}
+.scene-hero::before{content:'';position:absolute;inset:0;opacity:.15;}
+.scene-hero .emoji{font-size:36px;margin-bottom:8px;display:block;}
+.scene-hero h2{font-size:22px;font-weight:800;margin-bottom:4px;position:relative;}
+.scene-hero .time{font-size:12px;color:var(--dim);position:relative;}
+.scene-body{padding:16px 20px 20px;}
+.scene-body p{font-size:14px;line-height:1.8;color:var(--dim);margin-bottom:12px;}
+.scene-body p strong{color:var(--text);}
+
+/* Tip Box */
+.tip-box{background:rgba(255,209,102,.06);border:1px solid rgba(255,209,102,.15);border-radius:12px;padding:14px 16px;margin:12px 0;cursor:pointer;transition:all .3s;}
+.tip-box.open{background:rgba(255,209,102,.1);}
+.tip-header{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--gold);}
+.tip-header .arrow{transition:transform .3s;font-size:10px;}
+.tip-box.open .tip-header .arrow{transform:rotate(90deg);}
+.tip-content{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s;font-size:13px;line-height:1.7;color:var(--dim);}
+.tip-box.open .tip-content{max-height:500px;padding-top:10px;}
+
+/* Food Cards */
+.food-scroll{display:flex;gap:12px;overflow-x:auto;padding:4px 0 12px;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;}
+.food-scroll::-webkit-scrollbar{display:none;}
+.food-card{flex:0 0 220px;scroll-snap-align:start;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:16px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;}
+.food-card:active{transform:scale(.97);}
+.food-card.selected{border-color:var(--accent);background:rgba(255,107,53,.08);}
+.food-card .f-emoji{font-size:28px;margin-bottom:8px;}
+.food-card .f-name{font-size:15px;font-weight:700;margin-bottom:4px;}
+.food-card .f-addr{font-size:11px;color:var(--dim);margin-bottom:8px;}
+.food-card .f-desc{font-size:12px;color:var(--dim);line-height:1.6;}
+.food-card .f-tag{display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:600;margin-top:8px;}
+.food-card .f-tag.hot{background:rgba(230,57,70,.15);color:var(--red);}
+.food-card .f-tag.rec{background:rgba(6,214,160,.12);color:var(--green);}
+.food-card .f-tag.old{background:rgba(255,209,102,.12);color:var(--gold);}
+.food-card .f-price{font-size:11px;color:var(--accent);margin-top:6px;font-weight:600;}
+.food-card .f-menu{font-size:11px;color:var(--dim);margin-top:6px;line-height:1.5;}
+
+/* Choice Buttons */
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
+.choice-btn{padding:14px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);text-align:center;cursor:pointer;transition:all .3s;font-size:13px;color:var(--text);}
+.choice-btn:active{transform:scale(.96);}
+.choice-btn.picked{border-color:var(--green);background:rgba(6,214,160,.1);color:var(--green);}
+.choice-btn .c-emoji{font-size:24px;display:block;margin-bottom:6px;}
+.choice-btn .c-label{font-weight:600;}
+
+/* Location Cards */
+.loc-list{display:flex;flex-direction:column;gap:10px;margin:12px 0;}
+.loc-item{display:flex;align-items:center;gap:12px;padding:14px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);cursor:pointer;transition:all .3s;}
+.loc-item:active{transform:scale(.98);}
+.loc-item .l-emoji{font-size:24px;flex-shrink:0;}
+.loc-item .l-info{flex:1;}
+.loc-item .l-name{font-size:14px;font-weight:700;margin-bottom:2px;}
+.loc-item .l-meta{font-size:11px;color:var(--dim);}
+.loc-item .l-check{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .3s;flex-shrink:0;}
+.loc-item.visited .l-check{border-color:var(--green);background:var(--green);color:var(--bg);}
+.loc-detail{max-height:0;overflow:hidden;transition:max-height .4s ease;font-size:12px;line-height:1.7;color:var(--dim);padding:0 14px;}
+.loc-item.expanded+.loc-detail{max-height:300px;padding:8px 14px 14px;}
+
+/* Stamp Collect Animation */
+.stamp-toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:rgba(15,15,26,.95);border:2px solid var(--gold);border-radius:20px;padding:32px 40px;text-align:center;z-index:100;transition:transform .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none;}
+.stamp-toast.show{transform:translate(-50%,-50%) scale(1);}
+.stamp-toast .st-emoji{font-size:48px;display:block;margin-bottom:8px;}
+.stamp-toast .st-text{font-size:14px;color:var(--gold);font-weight:700;}
+.stamp-toast .st-name{font-size:18px;font-weight:800;margin-top:4px;}
+
+/* ===== Bottom Nav ===== */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:center;gap:4px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 30%);z-index:20;}
+.nav-dot{width:auto;padding:8px 16px;border-radius:20px;border:none;font-size:12px;font-weight:600;cursor:pointer;transition:all .3s;background:rgba(255,255,255,.06);color:var(--dim);}
+.nav-dot.active{background:var(--accent);color:#fff;}
+.nav-dot.done{background:rgba(6,214,160,.15);color:var(--green);}
+
+/* ===== Stamp Modal ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:50;opacity:0;pointer-events:none;transition:opacity .3s;}
+.modal-overlay.show{opacity:1;pointer-events:auto;}
+.modal-content{position:fixed;bottom:0;left:0;right:0;max-height:80vh;background:var(--card);border-radius:20px 20px 0 0;z-index:51;transform:translateY(100%);transition:transform .4s cubic-bezier(.32,.72,0,1);overflow-y:auto;padding-bottom:env(safe-area-inset-bottom);}
+.modal-overlay.show .modal-content{transform:translateY(0);}
+.modal-handle{width:36px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin:12px auto;}
+.modal-title{font-size:18px;font-weight:800;padding:8px 20px 16px;text-align:center;}
+.stamp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 20px 30px;}
+.stamp-cell{aspect-ratio:1;border-radius:14px;background:rgba(255,255,255,.03);border:2px dashed rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:all .3s;padding:8px;}
+.stamp-cell.earned{border:2px solid var(--gold);background:rgba(255,209,102,.06);animation:stampEarn .5s ease;}
+@keyframes stampEarn{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+.stamp-cell .s-emoji{font-size:28px;margin-bottom:4px;}
+.stamp-cell .s-name{font-size:11px;font-weight:600;color:var(--dim);}
+.stamp-cell.earned .s-name{color:var(--gold);}
+.stamp-cell .s-lock{font-size:24px;opacity:.2;}
+
+/* ===== End Screen ===== */
+#ending{justify-content:center;align-items:center;padding:40px 24px;text-align:center;background:linear-gradient(180deg,#0a0a1a,#1a1030 50%,#2d1b4e);}
+#ending .end-emoji{font-size:64px;margin-bottom:16px;animation:float 3s ease-in-out infinite;}
+#ending h2{font-size:28px;font-weight:800;margin-bottom:8px;}
+#ending .end-sub{color:var(--dim);font-size:14px;margin-bottom:24px;line-height:1.6;}
+.end-stats{display:flex;gap:20px;margin-bottom:32px;}
+.end-stat{text-align:center;}
+.end-stat .es-num{font-size:36px;font-weight:800;color:var(--gold);}
+.end-stat .es-label{font-size:12px;color:var(--dim);}
+.restart-btn{padding:14px 36px;font-size:15px;font-weight:700;border:none;border-radius:50px;background:rgba(255,255,255,.08);color:var(--text);cursor:pointer;}
+
+/* ===== Music Button ===== */
+.music-btn{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all .3s;flex-shrink:0;}
+.music-btn:active{transform:scale(.9);}
+.music-btn.playing{border-color:rgba(6,214,160,.4);background:rgba(6,214,160,.1);animation:pulse-music 2s ease-in-out infinite;}
+@keyframes pulse-music{0%,100%{box-shadow:0 0 0 0 rgba(6,214,160,.2)}50%{box-shadow:0 0 0 6px rgba(6,214,160,0)}}
+.header-right{display:flex;align-items:center;gap:8px;}
+
+/* ===== Weather Effects ===== */
+.rain-container{position:fixed;inset:0;pointer-events:none;z-index:5;overflow:hidden;}
+.raindrop{position:absolute;width:1px;background:linear-gradient(transparent,rgba(174,194,224,.3));animation:rain linear infinite;}
+@keyframes rain{0%{transform:translateY(-100vh)}100%{transform:translateY(100vh)}}
+
+/* ===== Misc ===== */
+.divider{height:1px;background:rgba(255,255,255,.06);margin:16px 0;}
+.section-label{font-size:11px;font-weight:700;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin:16px 0 8px;padding-left:2px;}
+.highlight{color:var(--accent);font-weight:700;}
+.highlight-green{color:var(--green);font-weight:700;}
+.highlight-gold{color:var(--gold);font-weight:700;}
+
+/* Progress Bar */
+.progress-wrap{padding:0 16px;margin-bottom:8px;}
+.progress-bar{height:3px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));transition:width .5s ease;border-radius:2px;}
+
+/* Scrollbar */
+.scene-area::-webkit-scrollbar{width:0;}
+
+/* Quiz */
+.quiz-box{background:rgba(17,138,178,.08);border:1px solid rgba(17,138,178,.2);border-radius:14px;padding:16px;margin:12px 0;}
+.quiz-q{font-size:14px;font-weight:700;color:var(--blue);margin-bottom:12px;}
+.quiz-opts{display:flex;flex-direction:column;gap:8px;}
+.quiz-opt{padding:12px 14px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);cursor:pointer;font-size:13px;transition:all .3s;display:flex;align-items:center;gap:10px;}
+.quiz-opt:active{transform:scale(.98);}
+.quiz-opt .q-letter{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.quiz-opt.correct{border-color:var(--green);background:rgba(6,214,160,.1);color:var(--green);}
+.quiz-opt.correct .q-letter{background:var(--green);color:var(--bg);}
+.quiz-opt.wrong{border-color:var(--red);background:rgba(230,57,70,.08);color:var(--red);opacity:.5;}
+.quiz-result{font-size:12px;color:var(--dim);margin-top:10px;line-height:1.6;padding:10px;background:rgba(255,255,255,.03);border-radius:8px;}
+
+/* Banner */
+.day-banner{text-align:center;padding:24px 16px 12px;}
+.day-banner .db-day{font-size:28px;font-weight:800;margin-bottom:2px;}
+.day-banner .db-date{font-size:12px;color:var(--dim);}
+.day-banner .db-weather{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:12px;background:rgba(255,255,255,.05);font-size:11px;color:var(--dim);margin-top:6px;}
+
+@media(min-width:500px){
+  #app{max-width:430px;margin:0 auto;box-shadow:0 0 60px rgba(0,0,0,.5);}
+  .bottom-nav{max-width:430px;left:50%;transform:translateX(-50%);}
+  .modal-overlay,.rain-container{max-width:430px;left:50%;transform:translateX(-50%);}
+  .stamp-toast{max-width:430px;transform:translate(-50%,-50%) scale(0);}
+  .stamp-toast.show{transform:translate(-50%,-50%) scale(1);}
+  .modal-content{max-width:430px;width:100%;left:50%;right:auto;transform:translateX(-50%) translateY(100%);}
+  .modal-overlay.show .modal-content{transform:translateX(-50%) translateY(0);}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- Title Screen -->
+  <div id="title" class="screen active">
+    <div class="title-top">
+      <div class="city-scape">
+        <div class="building b1"></div><div class="building b2"></div>
+        <div class="building b3"></div><div class="building b4"></div>
+        <div class="building b5"></div><div class="building b6"></div>
+        <div class="building b7"></div><div class="building b8"></div>
+        <div class="bridge"></div><div class="river"></div>
+      </div>
+      <div class="title-emoji">🏙️</div>
+      <h1>重庆48小时漫游记</h1>
+      <p class="sub">一份藏在游戏里的旅行攻略</p>
+      <p class="sub2">4月10日 - 4月12日 ｜ 吃50% 人文30% 打卡20%</p>
+      <div class="weather-badge">🌧️ 周五有雨 20-25°C ｜ ⛅ 周六多云 17-24°C ｜ ☀️ 周日晴暖 21-29°C</div>
+    </div>
+    <button class="start-btn" onclick="game.start()">开始冒险 →</button>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="game" class="screen">
+    <div class="game-header">
+      <span class="day-label" id="dayLabel">DAY 1</span>
+      <div class="header-right">
+        <div class="music-btn" id="musicBtn" onclick="music.toggle()" title="背景音乐">🔇</div>
+        <div class="stamp-btn" onclick="game.showStamps()">
+          🏅 印章 <span class="count" id="stampCount">0</span>
+        </div>
+      </div>
+    </div>
+    <div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+    <div class="scene-area" id="sceneArea"></div>
+    <div class="bottom-nav" id="bottomNav"></div>
+  </div>
+
+  <!-- End Screen -->
+  <div id="ending" class="screen">
+    <div class="end-emoji">🎉</div>
+    <h2>攻略解锁完成！</h2>
+    <p class="end-sub">重庆在等你。<br>带上这份攻略，吃好喝好，一路顺风。</p>
+    <div class="end-stats">
+      <div class="end-stat"><div class="es-num" id="endStamps">0</div><div class="es-label">印章收集</div></div>
+      <div class="end-stat"><div class="es-num" id="endPlaces">0</div><div class="es-label">地点解锁</div></div>
+      <div class="end-stat"><div class="es-num" id="endFoods">0</div><div class="es-label">美食发现</div></div>
+    </div>
+    <button class="restart-btn" onclick="game.restart()">再玩一次</button>
+  </div>
+
+  <!-- Stamp Modal -->
+  <div class="modal-overlay" id="stampModal" onclick="game.hideStamps(event)">
+    <div class="modal-content">
+      <div class="modal-handle"></div>
+      <div class="modal-title">🏅 印章收集册</div>
+      <div class="stamp-grid" id="stampGrid"></div>
+    </div>
+  </div>
+
+  <!-- Stamp Toast -->
+  <div class="stamp-toast" id="stampToast">
+    <span class="st-emoji" id="stEmoji"></span>
+    <div class="st-text">🎊 获得新印章！</div>
+    <div class="st-name" id="stName"></div>
+  </div>
+
+  <!-- Rain -->
+  <div class="rain-container" id="rainContainer"></div>
+</div>
+
+<script>
+const STAMPS = [
+  {id:'airport',emoji:'✈️',name:'深夜着陆'},
+  {id:'noodle',emoji:'🍜',name:'第一碗面'},
+  {id:'culture',emoji:'🏛️',name:'人文之旅'},
+  {id:'museum',emoji:'🏺',name:'博物馆达人'},
+  {id:'dinner1',emoji:'🍲',name:'地道味道'},
+  {id:'liziba',emoji:'🚃',name:'轻轨穿楼'},
+  {id:'huangjueping',emoji:'🎨',name:'市井烟火'},
+  {id:'teahouse',emoji:'🍵',name:'老茶馆'},
+  {id:'hotpot',emoji:'🔥',name:'火锅之魂'},
+  {id:'return',emoji:'🌅',name:'完美旅程'},
+];
+
+const CHAPTERS = [
+  // ===== DAY 1 =====
+  {
+    id:'d1-arrive', day:1, title:'深夜着陆', subtitle:'周五 01:30 · 江北机场',
+    heroGrad:'linear-gradient(135deg,#0a1628,#162447)',
+    emoji:'✈️',
+    render(el){
+      el.innerHTML = `
+        <p>凌晨 1:30，飞机降落在<strong>江北机场</strong>。窗外是重庆的雾气和远处模糊的灯火。</p>
+        <p>此刻地铁早已停运，你需要找到去酒店的方式。</p>
+        <div class="quiz-box" id="quiz-arrive">
+          <div class="quiz-q">🧭 凌晨到达，如何去酒店？</div>
+          <div class="quiz-opts">
+            <div class="quiz-opt" onclick="game.answerQuiz('arrive',0,this)"><span class="q-letter">A</span>等早上第一班地铁</div>
+            <div class="quiz-opt" onclick="game.answerQuiz('arrive',1,this)"><span class="q-letter">B</span>直接打车去酒店</div>
+            <div class="quiz-opt" onclick="game.answerQuiz('arrive',2,this)"><span class="q-letter">C</span>坐机场大巴K01</div>
+          </div>
+          <div class="quiz-result" id="quizResult-arrive" style="display:none"></div>
+        </div>
+        ${makeTip('交通贴士','<strong>地铁10号线末班约23:20</strong>，凌晨无法乘坐。<br>机场大巴K01虽然跑到最后航班后30分钟，停靠上清寺/大礼堂/解放碑，但单程约65分钟，不值得折腾。<br><strong>最优解：直接打车去如家</strong>，约30-40分钟车程。<br>如果航站楼和叫车点不一致，T2/T3有免费摆渡车（00:00-04:00 每30分钟一班）。')}
+        <div class="divider"></div>
+        <p>🏨 目的地：<strong>如家精选</strong>（上清寺路114号）<br>到了就睡，明天才是正经开始。</p>
+      `;
+    },
+    stamp:'airport'
+  },
+  {
+    id:'d1-breakfast', day:1, title:'第一碗面', subtitle:'周五 · 起床后',
+    heroGrad:'linear-gradient(135deg,#2d3436,#636e72)',
+    emoji:'🍜',
+    render(el){
+      el.innerHTML = `
+        <p>一觉睡到自然醒。窗外是重庆特有的<strong>灰蒙蒙的潮湿天</strong>。今天预报是闷热带雨，先吃碗面打底。</p>
+        <div class="section-label">选择你的第一顿</div>
+        <div class="food-scroll">
+          ${makeFoodCard('🍜','高胖妹小面','中山三路139号·宋庆龄旧居门口','07:00-19:30','本地面馆扛把子，适合"醒胃"','rec','推荐菜：豌杂面、牛肉面','')}
+          ${makeFoodCard('🥩','汪记眼镜牛肉面','上清寺路62号','清早营业','附近上班族常去的面馆','','推荐菜：牛肉面','')}
+          ${makeFoodCard('🥟','九园蒸味馆','中山四路·渝中大厦1楼','清早营业','重庆老字号，源头可追溯到1931年','old','推荐菜：包子、蒸菜','把老重庆感吃出来')}
+        </div>
+        <p style="font-size:12px;color:var(--dim);">← 左右滑动浏览 →</p>
+        ${makeTip('选择建议','<strong>高胖妹</strong>适合快速醒胃开工；<strong>九园</strong>更适合感受"老重庆"的气息。三家都离酒店步行可达。')}
+      `;
+    },
+    stamp:'noodle'
+  },
+  {
+    id:'d1-culture', day:1, title:'中山四路漫步', subtitle:'周五 · 上午/下午',
+    heroGrad:'linear-gradient(135deg,#2d3436,#4a6741)',
+    emoji:'🏛️',
+    render(el){
+      el.innerHTML = `
+        <p>吃完面，开始今天的<strong>人文路线</strong>。中山四路不靠"景点震撼"取胜，靠的是街道气质、旧址密度和历史层次。</p>
+        <div class="section-label">打卡路线（推荐顺序）</div>
+        <div class="loc-list">
+          ${makeLocItem('loc-1','🏛️','中国民主党派历史陈列馆','9:00-17:00 · 周一闭馆 · 免费','距桔子酒店约0.48公里')}
+          <div class="loc-detail" id="loc-1-detail">这里展示了中国各民主党派的历史。展馆免费参观，凭证件入内。建筑本身也很有年代感，适合慢慢看。</div>
+          ${makeLocItem('loc-2','🏠','桂园','周二至周日 09:00-16:30','距桔子酒店约0.71公里')}
+          <div class="loc-detail" id="loc-2-detail">1945年毛泽东与蒋介石在此签署《双十协定》的历史旧址。小院安静，很有氛围。</div>
+          ${makeLocItem('loc-3','🏢','周公馆','9:00-19:00 · 18:30停止入内','建议提前在红岩博物馆/红村网预约')}
+          <div class="loc-detail" id="loc-3-detail">中共代表团驻渝办事处旧址。需提前预约，是中山四路这条线上最重要的一站。</div>
+        </div>
+        ${makeTip('雨天贴士','今天预报有雨🌧️，这条线都是室内场馆，完全不怕淋。带把伞在路上走走就好。')}
+      `;
+    },
+    stamp:'culture'
+  },
+  {
+    id:'d1-museum', day:1, title:'三峡博物馆', subtitle:'周五 · 雨天加分项',
+    heroGrad:'linear-gradient(135deg,#3d3d3d,#5c4033)',
+    emoji:'🏺',
+    render(el){
+      el.innerHTML = `
+        <p>如果周五雨下得大，看完中山四路的馆舍后，直接加上<strong>三峡博物馆</strong>。这样第一天几乎不用在雨里大范围移动。</p>
+        <div class="loc-list">
+          ${makeLocItem('loc-museum','🏺','重庆中国三峡博物馆','周二至周日 9:00-17:00 · 16:30停止入馆','已取消预约，凭有效证件入馆')}
+          <div class="loc-detail" id="loc-museum-detail">已官方取消预约制度，直接凭身份证入馆。周一闭馆。展品涵盖三峡地区自然与文化历史，值得一看。</div>
+        </div>
+        <div class="quiz-box" id="quiz-museum">
+          <div class="quiz-q">📋 三峡博物馆现在需要预约吗？</div>
+          <div class="quiz-opts">
+            <div class="quiz-opt" onclick="game.answerQuiz('museum',0,this)"><span class="q-letter">A</span>需要提前3天预约</div>
+            <div class="quiz-opt" onclick="game.answerQuiz('museum',1,this)"><span class="q-letter">B</span>已取消预约，凭证件入馆</div>
+            <div class="quiz-opt" onclick="game.answerQuiz('museum',2,this)"><span class="q-letter">C</span>需要买门票</div>
+          </div>
+          <div class="quiz-result" id="quizResult-museum" style="display:none"></div>
+        </div>
+      `;
+    },
+    stamp:'museum'
+  },
+  {
+    id:'d1-dinner', day:1, title:'晚餐时间', subtitle:'周五 · 傍晚',
+    heroGrad:'linear-gradient(135deg,#4a1a2e,#2d1b4e)',
+    emoji:'🍲',
+    render(el){
+      el.innerHTML = `
+        <p>第一天的晚餐，<strong>不去解放碑跟游客抢</strong>，就在酒店附近解决。今天不吃火锅——把火锅留给明天晚上。</p>
+        <div class="section-label">选择今晚的餐厅</div>
+        <div class="food-scroll">
+          ${makeFoodCard('🍳','无名烧菜','中山三路新村2号','10:30开始 · 人均约38','典型家常苍蝇馆子，本地人最爱','rec','招牌：红烧肥肠、蒜泥白肉、牛筋烧土豆','最推荐')}
+          ${makeFoodCard('🐔','陈有良尖椒鸡','山益村153号','午晚餐','江湖菜代表，更浓更"重庆"的味型','hot','招牌：尖椒鸡','')}
+          ${makeFoodCard('🍗','喜洋洋','中山四路','午晚餐','想坐得舒服一点的选择','','推荐：酱油鸡、小米排骨','')}
+          ${makeFoodCard('🥘','廖记老砂锅','中山四路','午晚餐','适合下饭的砂锅菜','','推荐：烂肉豌豆砂锅','')}
+        </div>
+        <p style="font-size:12px;color:var(--dim);">← 左右滑动浏览 →</p>
+        ${makeTip('点菜建议','无名烧菜最优先，两人点<strong>红烧肥肠+蒜泥白肉+一个素菜</strong>就够。人均38，性价比拉满。')}
+      `;
+    },
+    stamp:'dinner1'
+  },
+  {
+    id:'d1-evening', day:1, title:'李子坝夕阳', subtitle:'周五 · 傍晚至夜间',
+    heroGrad:'linear-gradient(135deg,#e17055,#6c5ce7)',
+    emoji:'🚃',
+    render(el){
+      el.innerHTML = `
+        <p>傍晚到晚间，做这趟仅有的一点<strong>"热门景点配额"</strong>。好消息：都离酒店很近。</p>
+        <div class="section-label">傍晚路线</div>
+        <div class="loc-list">
+          ${makeLocItem('loc-lzb1','🚃','李子坝观景平台','全天开放','距桔子酒店约0.65公里，拍"轻轨穿楼"的最佳位置')}
+          <div class="loc-detail" id="loc-lzb1-detail">官方已开放的观景平台，可以更完整地拍到"轻轨穿楼"的经典画面。傍晚光线最好。</div>
+          ${makeLocItem('loc-lzb2','🌿','李子坝抗战遗址公园','全天开放','隐藏加分项，就在李子坝站旁边')}
+          <div class="loc-detail" id="loc-lzb2-detail">很多游客会忽略的宝藏地点。就在李子坝站旁边，有历史展示和不错的江景视角。</div>
+          ${makeLocItem('loc-lzb3','🏭','鹅岭贰厂','鹅岭正街1号','前身是老印刷厂，工业遗存+山城视角')}
+          <div class="loc-detail" id="loc-lzb3-detail">由老印刷厂改造的创意园区，工业遗存和山城高差视角都很好。适合拍照和闲逛。</div>
+        </div>
+        ${makeTip('夜间选项','如果晚上还有精力：<br>• <strong>杜老五夜啤酒</strong>（15:30-03:00）——本地夜生活味道<br>• 洪崖洞——<strong>只在外面看外立面拍几张就撤</strong>，不要把时间耗在里面<br>• 累了就回酒店，明天才是主玩日')}
+      `;
+    },
+    stamp:'liziba'
+  },
+  // ===== DAY 2 =====
+  {
+    id:'d2-morning', day:2, title:'换酒店·去黄桷坪', subtitle:'周六 · 上午',
+    heroGrad:'linear-gradient(135deg,#636e72,#b2bec3)',
+    emoji:'🎨',
+    render(el){
+      el.innerHTML = `
+        <p>今天一早不用着急。两家酒店就在<strong>上清寺路114号和112号</strong>，门牌差2号，换房成本几乎为零。</p>
+        <div class="quiz-box" id="quiz-hotel">
+          <div class="quiz-q">🏨 最聪明的换酒店方式是？</div>
+          <div class="quiz-opts">
+            <div class="quiz-opt" onclick="game.answerQuiz('hotel',0,this)"><span class="q-letter">A</span>下午再回来换</div>
+            <div class="quiz-opt" onclick="game.answerQuiz('hotel',1,this)"><span class="q-letter">B</span>早上退如家，行李寄存桔子前台，晚上入住</div>
+            <div class="quiz-opt" onclick="game.answerQuiz('hotel',2,this)"><span class="q-letter">C</span>把行李放如家，先出去玩</div>
+          </div>
+          <div class="quiz-result" id="quizResult-hotel" style="display:none"></div>
+        </div>
+        <div class="divider"></div>
+        <p>收拾好后出发去<strong>黄桷坪</strong>——重庆少有还能把茶馆、老街、艺术学校、社区馆子揉在一起的地方。</p>
+        <div class="loc-list">
+          ${makeLocItem('loc-hjp1','🎨','黄桷坪涂鸦街','全天','老街巷+涂鸦艺术，适合慢走')}
+          <div class="loc-detail" id="loc-hjp1-detail">整条街覆盖了各种涂鸦作品，周边串着川美老校区和旧街巷。不是"打卡到此一游"的景点，而是可以慢慢走慢慢看的地方。</div>
+          ${makeLocItem('loc-hjp2','🏫','四川美术学院（老校区）','校园开放','就在涂鸦街旁边')}
+          <div class="loc-detail" id="loc-hjp2-detail">川美老校区就在黄桷坪，艺术氛围浓厚，校园本身就像一个展览。</div>
+        </div>
+      `;
+    },
+    stamp:'huangjueping'
+  },
+  {
+    id:'d2-teahouse', day:2, title:'交通茶馆', subtitle:'周六 · 上午',
+    heroGrad:'linear-gradient(135deg,#5c4033,#8d6e63)',
+    emoji:'🍵',
+    render(el){
+      el.innerHTML = `
+        <p>黄桷坪的灵魂——<strong>交通茶馆</strong>。不是网红店，是真正在运营的老茶馆。</p>
+        <div class="loc-list">
+          ${makeLocItem('loc-tea','🍵','交通茶馆','07:00-19:00','黄桷坪最值得去的地方')}
+          <div class="loc-detail" id="loc-tea-detail">重庆现存最有代表性的老茶馆之一。老虎灶、竹椅、盖碗茶，本地老人在这里喝茶打牌聊天。坐下来喝杯茶，感受这座城市的"慢"。</div>
+        </div>
+        <div class="divider"></div>
+        <div class="section-label">黄桷坪午餐</div>
+        <div class="food-scroll">
+          ${makeFoodCard('🦶','胡记蹄花汤','新建路5-2号·川美地铁站4口步行约70米','人均约40','黄桷坪老味道代表','rec','推荐：蹄花汤+青椒皮蛋+凉菜','首选')}
+          ${makeFoodCard('🔥','苟味道老火锅','黄桷坪正街100号·川美对面','人均适中','本地"老馆子"推荐常客','hot','如果突然很想吃火锅','')}
+        </div>
+        <p style="font-size:12px;color:var(--dim);">← 左右滑动浏览 →</p>
+        ${makeTip('午饭建议','最推荐<strong>胡记蹄花汤</strong>，点蹄花汤+青椒皮蛋+一两个凉菜就够。如果那天突然很想火锅，就改苟味道。')}
+      `;
+    },
+    stamp:'teahouse'
+  },
+  {
+    id:'d2-dinner', day:2, title:'火锅之夜', subtitle:'周六 · 晚间',
+    heroGrad:'linear-gradient(135deg,#c0392b,#e74c3c,#d35400)',
+    emoji:'🔥',
+    render(el){
+      el.innerHTML = `
+        <p>下午回桔子正式入住，睡一会儿。晚上这顿才是这趟<strong>最重要的一顿</strong>。</p>
+        <div class="section-label">今晚你选哪个？</div>
+        <div class="choice-grid">
+          <div class="choice-btn" onclick="game.makeChoice('dinner2','sijian',this)"><span class="c-emoji">🔥</span><span class="c-label">四间火锅</span><br><span style="font-size:11px;color:var(--dim)">4.8分·人均78</span></div>
+          <div class="choice-btn" onclick="game.makeChoice('dinner2','chenyl',this)"><span class="c-emoji">🌶️</span><span class="c-label">陈有良尖椒鸡</span><br><span style="font-size:11px;color:var(--dim)">江湖菜</span></div>
+          <div class="choice-btn" onclick="game.makeChoice('dinner2','liusi',this)"><span class="c-emoji">♨️</span><span class="c-label">刘四老火锅</span><br><span style="font-size:11px;color:var(--dim)">两路口体育路</span></div>
+          <div class="choice-btn" onclick="game.makeChoice('dinner2','dulw',this)"><span class="c-emoji">🍺</span><span class="c-label">杜老五夜啤酒</span><br><span style="font-size:11px;color:var(--dim)">15:30-03:00</span></div>
+        </div>
+        <div id="dinner2-detail" style="margin-top:12px"></div>
+        <div class="divider"></div>
+        ${makeTip('选择指南','想吃重庆最直接的味道 → <strong>四间或刘四</strong><br>想吃更"江湖菜"一点 → <strong>陈有良</strong><br>想松弛收尾+在地夜生活 → <strong>杜老五</strong><br><br>四间火锅推荐点：<strong>毛肚、冷锅鸭血、现炸酥肉、解辣冰汤圆</strong>')}
+        <div class="divider"></div>
+        <p>吃完以后，如果还想留点"重庆人的慢"，去<strong>人民公园坝坝茶/长亭茶园</strong>坐半小时。大致 08:00-21:00 开放。不是网红震撼，但适合你们这种短途想摸到城市纹理的人。</p>
+      `;
+    },
+    stamp:'hotpot'
+  },
+  // ===== DAY 3 =====
+  {
+    id:'d3-return', day:3, title:'归途', subtitle:'周日 · 凌晨',
+    heroGrad:'linear-gradient(135deg,#2c3e50,#3498db)',
+    emoji:'🌅',
+    render(el){
+      el.innerHTML = `
+        <p>06:35的早班机，今晚别熬太狠。</p>
+        <div class="quiz-box" id="quiz-return">
+          <div class="quiz-q">⏰ 几点从酒店出发最稳？</div>
+          <div class="quiz-opts">
+            <div class="quiz-opt" onclick="game.answerQuiz('return',0,this)"><span class="q-letter">A</span>5:00出发，时间充裕</div>
+            <div class="quiz-opt" onclick="game.answerQuiz('return',1,this)"><span class="q-letter">B</span>4:00-4:10出发</div>
+            <div class="quiz-opt" onclick="game.answerQuiz('return',2,this)"><span class="q-letter">C</span>4:30出发够了</div>
+          </div>
+          <div class="quiz-result" id="quizResult-return" style="display:none"></div>
+        </div>
+        ${makeTip('返程清单','✅ 3:40 起床<br>✅ 4:00-4:10 从桔子出发打车<br>✅ 有托运行李按4:00走，没有可卡4:10<br>✅ 前一晚线上值机省时间<br>✅ 国内航班起飞前40分钟截止办理乘机手续<br>✅ 市区到机场约30-40分钟车程')}
+        <div class="divider"></div>
+        <div class="section-label">📋 这趟最该记住的6家馆子</div>
+        <div class="food-scroll">
+          ${makeFoodCard('🍜','高胖妹小面','中山三路139号','豌杂面/牛肉面','醒胃首选','rec','','')}
+          ${makeFoodCard('🍳','无名烧菜','中山三路新村2号','红烧肥肠/蒜泥白肉','家常苍蝇馆·人均38','rec','','')}
+          ${makeFoodCard('🌶️','陈有良尖椒鸡','山益村153号','尖椒鸡','江湖菜代表','hot','','')}
+          ${makeFoodCard('🥟','九园蒸味馆','中山四路','包子/蒸菜','1931年老字号','old','','')}
+          ${makeFoodCard('🔥','四间火锅','中山三路','毛肚/鸭血/酥肉','4.8分·人均78','hot','','')}
+          ${makeFoodCard('🦶','胡记蹄花汤','新建路5-2号','蹄花汤','黄桷坪老味道','rec','','')}
+        </div>
+        <p style="font-size:12px;color:var(--dim);">← 左右滑动浏览 →</p>
+        <div class="divider"></div>
+        <p style="text-align:center;padding:12px 0;">
+          <strong style="font-size:16px;">鞋子防滑，伞一定带。</strong><br>
+          <span style="color:var(--dim);font-size:13px;">重庆在等你，吃好喝好，一路顺风。🌆</span>
+        </p>
+      `;
+    },
+    stamp:'return'
+  }
+];
+
+const QUIZ_ANSWERS = {
+  arrive: {correct:1, texts:[
+    '❌ 等地铁太久了！10号线末班约23:20，凌晨没有地铁。而且你得多等5-6个小时……',
+    '✅ 正确！凌晨1:30落地，直接打车最省脑。约30-40分钟到酒店，可以早点休息。',
+    '❌ K01大巴虽然夜里还能跑，但单程约65分钟，这趟不值得折腾。'
+  ]},
+  museum: {correct:1, texts:[
+    '❌ 好消息——三峡博物馆已经官方取消预约制度了！',
+    '✅ 答对了！三峡博物馆已取消预约，凭有效身份证件直接入馆。周二至周日 9:00-17:00（16:30停止入馆），周一闭馆。',
+    '❌ 三峡博物馆是免费的，凭证件入馆即可。'
+  ]},
+  hotel: {correct:1, texts:[
+    '❌ 下午再回来换太浪费时间了。两家酒店就隔2个门牌号！',
+    '✅ 最聪明！如家退房前把行李拿去桔子前台寄存，出去玩一天，晚上回来直接入住。换酒店成本几乎为零。（如家12:00退房，桔子14:00入住）',
+    '❌ 如家12:00退房后行李没地方放了，应该寄存到桔子。'
+  ]},
+  return: {correct:1, texts:[
+    '❌ 5:00太早了，4:00出发就很稳了，不用把自己搞太累。',
+    '✅ 完美！国内航班起飞前40分钟截止办理，市区到机场30-40分钟。4:00-4:10出发，有托运走4:00，没托运卡4:10。',
+    '❌ 4:30有点紧张了。万一路上堵一下就赶不上了，建议再提前20分钟。'
+  ]}
+};
+
+const DINNER2_DETAILS = {
+  sijian:'<div class="food-card" style="flex:none;width:auto;"><div class="f-emoji">🔥</div><div class="f-name">四间火锅（上清寺老重庆店）</div><div class="f-addr">中山三路交通银行旁 · 大众点评4.8分 · 人均约78</div><div class="f-menu">必点：毛肚、冷锅鸭血、现炸酥肉、解辣冰汤圆</div><div class="f-tag hot">重庆最直接的味道</div></div>',
+  chenyl:'<div class="food-card" style="flex:none;width:auto;"><div class="f-emoji">🌶️</div><div class="f-name">陈有良尖椒鸡</div><div class="f-addr">山益村153号</div><div class="f-menu">招牌就是尖椒鸡，江湖菜的代表</div><div class="f-tag hot">更浓更"重庆"</div></div>',
+  liusi:'<div class="food-card" style="flex:none;width:auto;"><div class="f-emoji">♨️</div><div class="f-name">刘四老火锅</div><div class="f-addr">两路口体育路</div><div class="f-menu">老派重庆火锅的味道</div><div class="f-tag hot">本地老饕推荐</div></div>',
+  dulw:'<div class="food-card" style="flex:none;width:auto;"><div class="f-emoji">🍺</div><div class="f-name">杜老五夜啤酒</div><div class="f-addr">15:30-03:00</div><div class="f-menu">夜啤酒+烧烤，本地夜生活的正确打开方式</div><div class="f-tag rec">松弛收尾</div></div>'
+};
+
+// ===== HELPER FUNCTIONS =====
+function makeTip(title, content) {
+  return `<div class="tip-box" onclick="this.classList.toggle('open')"><div class="tip-header"><span>💡</span> ${title} <span class="arrow">▶</span></div><div class="tip-content">${content}</div></div>`;
+}
+
+function makeFoodCard(emoji, name, addr, time, desc, tagType, menu, extra) {
+  const tagMap = {hot:'辣',rec:'推荐',old:'老字号'};
+  const tag = tagType ? `<div class="f-tag ${tagType}">${extra||tagMap[tagType]||tagType}</div>` : '';
+  return `<div class="food-card"><div class="f-emoji">${emoji}</div><div class="f-name">${name}</div><div class="f-addr">${addr}${time?' · '+time:''}</div><div class="f-desc">${desc}</div>${menu?'<div class="f-menu">'+menu+'</div>':''}${tag}</div>`;
+}
+
+function makeLocItem(id, emoji, name, meta, extra) {
+  return `<div class="loc-item" id="${id}" onclick="game.toggleLoc('${id}')"><span class="l-emoji">${emoji}</span><div class="l-info"><div class="l-name">${name}</div><div class="l-meta">${meta}${extra?'<br>'+extra:''}</div></div><div class="l-check">✓</div></div>`;
+}
+
+// ===== GAME CLASS =====
+const game = {
+  currentChapter: 0,
+  stamps: new Set(),
+  quizAnswered: {},
+  choices: {},
+  visitedLocs: new Set(),
+
+  start() {
+    document.getElementById('title').classList.remove('active');
+    document.getElementById('game').classList.add('active');
+    this.renderNav();
+    this.showChapter(0);
+    this.startRain();
+  },
+
+  restart() {
+    this.currentChapter = 0;
+    this.stamps = new Set();
+    this.quizAnswered = {};
+    this.choices = {};
+    this.visitedLocs = new Set();
+    document.getElementById('ending').classList.remove('active');
+    document.getElementById('title').classList.add('active');
+  },
+
+  showChapter(idx) {
+    if (idx < 0 || idx >= CHAPTERS.length) return;
+    this.currentChapter = idx;
+    const ch = CHAPTERS[idx];
+    const area = document.getElementById('sceneArea');
+    area.scrollTop = 0;
+
+    // Day label
+    const dayLabels = ['DAY 1 · 周五','DAY 1 · 周五','DAY 1 · 周五','DAY 1 · 周五','DAY 1 · 周五','DAY 1 · 周五','DAY 2 · 周六','DAY 2 · 周六','DAY 2 · 周六','DAY 3 · 周日'];
+    document.getElementById('dayLabel').textContent = dayLabels[idx] || 'DAY '+ ch.day;
+
+    // Day banner + weather
+    const weathers = {1:'🌧️ 闷热有雨 18-25°C',2:'⛅ 多云偶雨 17-24°C',3:'☀️ 晴暖 21-29°C'};
+    const bannerHTML = `<div class="day-banner"><div class="db-weather">${weathers[ch.day]}</div></div>`;
+
+    // Scene card
+    let html = bannerHTML;
+    html += `<div class="scene-card"><div class="scene-hero" style="background:${ch.heroGrad}"><span class="emoji">${ch.emoji}</span><h2>${ch.title}</h2><div class="time">${ch.subtitle}</div></div><div class="scene-body" id="scene-body"></div></div>`;
+
+    // Stamp collect button (if not yet earned)
+    if (ch.stamp && !this.stamps.has(ch.stamp)) {
+      html += `<div style="text-align:center;padding:12px 0;"><button style="padding:12px 28px;border-radius:50px;border:2px solid var(--gold);background:rgba(255,209,102,.08);color:var(--gold);font-size:14px;font-weight:700;cursor:pointer;" onclick="game.collectStamp('${ch.stamp}')">🏅 收集印章：${STAMPS.find(s=>s.id===ch.stamp).name}</button></div>`;
+    } else if (ch.stamp && this.stamps.has(ch.stamp)) {
+      html += `<div style="text-align:center;padding:12px 0;color:var(--green);font-size:13px;">✅ 已收集：${STAMPS.find(s=>s.id===ch.stamp).name}</div>`;
+    }
+
+    area.innerHTML = html;
+    ch.render(document.getElementById('scene-body'));
+
+    // Restore quiz states
+    Object.keys(this.quizAnswered).forEach(qid => {
+      const data = this.quizAnswered[qid];
+      const quiz = document.getElementById('quiz-'+qid);
+      if (!quiz) return;
+      const opts = quiz.querySelectorAll('.quiz-opt');
+      opts.forEach((o,i) => {
+        if (i === QUIZ_ANSWERS[qid].correct) o.classList.add('correct');
+        else if (i === data.picked) o.classList.add('wrong');
+        o.style.pointerEvents = 'none';
+      });
+      const r = document.getElementById('quizResult-'+qid);
+      if (r) { r.style.display = 'block'; r.innerHTML = data.text; }
+    });
+
+    // Restore loc visits
+    this.visitedLocs.forEach(lid => {
+      const el = document.getElementById(lid);
+      if (el) el.classList.add('visited');
+    });
+
+    // Restore choices
+    if (this.choices.dinner2) {
+      const detail = document.getElementById('dinner2-detail');
+      if (detail) detail.innerHTML = DINNER2_DETAILS[this.choices.dinner2] || '';
+    }
+
+    // Update nav
+    this.updateNav();
+    this.updateProgress();
+    this.updateStampCount();
+
+    // Rain control
+    const rain = document.getElementById('rainContainer');
+    rain.style.display = ch.day === 1 ? 'block' : 'none';
+  },
+
+  renderNav() {
+    const nav = document.getElementById('bottomNav');
+    let html = '';
+    CHAPTERS.forEach((ch, i) => {
+      const short = ['着陆','早餐','人文','博物馆','晚餐','李子坝','黄桷坪','茶馆','火锅','归途'];
+      html += `<div class="nav-dot" data-idx="${i}" onclick="game.showChapter(${i})">${short[i]||ch.title}</div>`;
+    });
+    nav.innerHTML = html;
+  },
+
+  updateNav() {
+    document.querySelectorAll('.nav-dot').forEach((dot, i) => {
+      dot.classList.toggle('active', i === this.currentChapter);
+      const ch = CHAPTERS[i];
+      dot.classList.toggle('done', ch.stamp && this.stamps.has(ch.stamp));
+    });
+    // Scroll active nav dot into view
+    const activeDot = document.querySelector('.nav-dot.active');
+    if (activeDot) activeDot.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+  },
+
+  updateProgress() {
+    const pct = ((this.currentChapter + 1) / CHAPTERS.length) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+  },
+
+  updateStampCount() {
+    document.getElementById('stampCount').textContent = this.stamps.size;
+  },
+
+  collectStamp(id) {
+    if (this.stamps.has(id)) return;
+    this.stamps.add(id);
+    const stamp = STAMPS.find(s => s.id === id);
+    // Show toast
+    document.getElementById('stEmoji').textContent = stamp.emoji;
+    document.getElementById('stName').textContent = stamp.name;
+    const toast = document.getElementById('stampToast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1800);
+    this.updateStampCount();
+    this.updateNav();
+    // Refresh the collect button
+    this.showChapter(this.currentChapter);
+    // Check completion
+    if (this.stamps.size === STAMPS.length) {
+      setTimeout(() => this.showEnding(), 2000);
+    }
+  },
+
+  showStamps() {
+    const grid = document.getElementById('stampGrid');
+    grid.innerHTML = STAMPS.map(s => {
+      const earned = this.stamps.has(s.id);
+      return `<div class="stamp-cell ${earned?'earned':''}"><span class="${earned?'s-emoji':'s-lock'}">${earned?s.emoji:'🔒'}</span><span class="s-name">${earned?s.name:'???'}</span></div>`;
+    }).join('');
+    document.getElementById('stampModal').classList.add('show');
+  },
+
+  hideStamps(e) {
+    if (e.target === e.currentTarget) {
+      document.getElementById('stampModal').classList.remove('show');
+    }
+  },
+
+  answerQuiz(qid, idx, el) {
+    if (this.quizAnswered[qid]) return;
+    const qa = QUIZ_ANSWERS[qid];
+    const quiz = document.getElementById('quiz-'+qid);
+    const opts = quiz.querySelectorAll('.quiz-opt');
+    opts.forEach((o, i) => {
+      if (i === qa.correct) o.classList.add('correct');
+      else if (i === idx) o.classList.add('wrong');
+      o.style.pointerEvents = 'none';
+    });
+    const r = document.getElementById('quizResult-'+qid);
+    r.style.display = 'block';
+    r.innerHTML = qa.texts[idx];
+    this.quizAnswered[qid] = {picked: idx, text: qa.texts[idx]};
+  },
+
+  toggleLoc(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const wasExpanded = el.classList.contains('expanded');
+    // Close all
+    document.querySelectorAll('.loc-item.expanded').forEach(e => e.classList.remove('expanded'));
+    if (!wasExpanded) {
+      el.classList.add('expanded');
+      el.classList.add('visited');
+      this.visitedLocs.add(id);
+    }
+  },
+
+  makeChoice(group, value, el) {
+    this.choices[group] = value;
+    const parent = el.parentElement;
+    parent.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('picked'));
+    el.classList.add('picked');
+    const detail = document.getElementById(group+'-detail');
+    if (detail && DINNER2_DETAILS[value]) {
+      detail.innerHTML = DINNER2_DETAILS[value];
+    }
+  },
+
+  showEnding() {
+    document.getElementById('game').classList.remove('active');
+    document.getElementById('ending').classList.add('active');
+    document.getElementById('endStamps').textContent = this.stamps.size;
+    document.getElementById('endPlaces').textContent = this.visitedLocs.size;
+    document.getElementById('endFoods').textContent = '6+';
+    document.getElementById('rainContainer').style.display = 'none';
+  },
+
+  startRain() {
+    const container = document.getElementById('rainContainer');
+    container.innerHTML = '';
+    for (let i = 0; i < 60; i++) {
+      const drop = document.createElement('div');
+      drop.className = 'raindrop';
+      drop.style.left = Math.random() * 100 + '%';
+      drop.style.height = Math.random() * 18 + 8 + 'px';
+      drop.style.animationDuration = Math.random() * 0.5 + 0.6 + 's';
+      drop.style.animationDelay = Math.random() * 2 + 's';
+      drop.style.opacity = Math.random() * 0.3 + 0.1;
+      container.appendChild(drop);
+    }
+  }
+};
+
+// Swipe support
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, {passive:true});
+document.addEventListener('touchend', e => {
+  if (!document.getElementById('game').classList.contains('active')) return;
+  const diff = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(diff) > 80) {
+    if (diff < 0 && game.currentChapter < CHAPTERS.length - 1) game.showChapter(game.currentChapter + 1);
+    else if (diff > 0 && game.currentChapter > 0) game.showChapter(game.currentChapter - 1);
+  }
+}, {passive:true});
+
+// ===== MUSIC ENGINE (Web Audio API) =====
+const music = {
+  ctx: null,
+  playing: false,
+  masterGain: null,
+  delayNode: null,
+  nodes: [],
+  timers: [],
+
+  // Chinese pentatonic (higher registers, airy)
+  // C5  D5   E5   G5   A5   C6   D6   E6
+  scale: [523.3, 587.3, 659.3, 784.0, 880.0, 1046.5, 1174.7, 1318.5],
+
+  init() {
+    if (this.ctx) return;
+    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+    // Master gain (keep low for gentle sound)
+    this.masterGain = this.ctx.createGain();
+    this.masterGain.gain.value = 0;
+
+    // High-pass filter to remove any low-end rumble
+    const hiPass = this.ctx.createBiquadFilter();
+    hiPass.type = 'highpass';
+    hiPass.frequency.value = 300;
+    hiPass.Q.value = 0.5;
+
+    // Delay for spacious reverb-like feel
+    this.delayNode = this.ctx.createDelay(1);
+    this.delayNode.delayTime.value = 0.4;
+    const delayGain = this.ctx.createGain();
+    delayGain.gain.value = 0.25;
+    const delayFilter = this.ctx.createBiquadFilter();
+    delayFilter.type = 'lowpass';
+    delayFilter.frequency.value = 2000;
+
+    // Routing: master → hiPass → destination
+    //          master → delay → filter → delayGain → destination
+    //                   delay ← delayGain (feedback)
+    this.masterGain.connect(hiPass);
+    hiPass.connect(this.ctx.destination);
+
+    this.masterGain.connect(this.delayNode);
+    this.delayNode.connect(delayFilter);
+    delayFilter.connect(delayGain);
+    delayGain.connect(this.ctx.destination);
+    delayGain.connect(this.delayNode); // feedback loop
+  },
+
+  toggle() {
+    this.init();
+    if (this.playing) this.stop(); else this.play();
+  },
+
+  updateBtn() {
+    const btn = document.getElementById('musicBtn');
+    if (!btn) return;
+    btn.textContent = this.playing ? '🎵' : '🔇';
+    btn.classList.toggle('playing', this.playing);
+  },
+
+  play() {
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+    this.playing = true;
+    this.updateBtn();
+    this.masterGain.gain.cancelScheduledValues(this.ctx.currentTime);
+    this.masterGain.gain.setValueAtTime(this.masterGain.gain.value, this.ctx.currentTime);
+    this.masterGain.gain.linearRampToValueAtTime(0.3, this.ctx.currentTime + 2);
+    this.startMelody();
+    this.startChimes();
+    this.startPad();
+  },
+
+  stop() {
+    this.playing = false;
+    this.updateBtn();
+    if (this.masterGain) {
+      this.masterGain.gain.cancelScheduledValues(this.ctx.currentTime);
+      this.masterGain.gain.setValueAtTime(this.masterGain.gain.value, this.ctx.currentTime);
+      this.masterGain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 1.2);
+    }
+    this.timers.forEach(t => clearTimeout(t));
+    this.timers = [];
+    setTimeout(() => {
+      this.nodes.forEach(n => { try { n.stop(); } catch(e){} });
+      this.nodes = [];
+    }, 1500);
+  },
+
+  // Soft high-register pad (no low rumble)
+  startPad() {
+    const root = 523.3; // C5
+    const fifth = 784.0; // G5
+
+    const makePadVoice = (freq, vol) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const filter = this.ctx.createBiquadFilter();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      filter.type = 'bandpass';
+      filter.frequency.value = freq;
+      filter.Q.value = 2;
+      gain.gain.value = vol;
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.masterGain);
+      osc.start();
+      this.nodes.push(osc);
+
+      // Very slow vibrato
+      const vib = this.ctx.createOscillator();
+      const vibG = this.ctx.createGain();
+      vib.frequency.value = 0.08;
+      vibG.gain.value = 2;
+      vib.connect(vibG);
+      vibG.connect(osc.frequency);
+      vib.start();
+      this.nodes.push(vib);
+    };
+
+    makePadVoice(root, 0.04);
+    makePadVoice(fifth, 0.025);
+  },
+
+  // Pentatonic melody notes (gentle, spaced out)
+  startMelody() {
+    const playNote = () => {
+      if (!this.playing) return;
+      const freq = this.scale[Math.floor(Math.random() * 6)]; // lower part of scale
+      const t = this.ctx.currentTime;
+
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.1, t + 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 2.8);
+      osc.connect(gain);
+      gain.connect(this.masterGain);
+      osc.start(t);
+      osc.stop(t + 3);
+
+      const next = 2000 + Math.random() * 3000;
+      this.timers.push(setTimeout(() => playNote(), next));
+    };
+    playNote();
+  },
+
+  // Sparkle chimes (very high, very quiet)
+  startChimes() {
+    const playChime = () => {
+      if (!this.playing) return;
+      const freq = this.scale[4 + Math.floor(Math.random() * 4)]; // high part
+      const t = this.ctx.currentTime;
+
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.045, t + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 3.5);
+      osc.connect(gain);
+      gain.connect(this.masterGain);
+      osc.start(t);
+      osc.stop(t + 4);
+
+      const next = 4000 + Math.random() * 6000;
+      this.timers.push(setTimeout(() => playChime(), next));
+    };
+    this.timers.push(setTimeout(() => playChime(), 3000));
+  }
+};
+</script>
+</body>
+</html>
