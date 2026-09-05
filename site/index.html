@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f8fc" />
+    <meta
+      name="description"
+      content="boomyao 的小应用集合。整理演奏视频，解决日常小问题；打开应用，即可使用和分享。"
+    />
+    <meta property="og:title" content="boomyao 的工具箱" />
+    <meta
+      property="og:description"
+      content="一些解决具体问题的小应用。打开就能用，也可以分享给朋友。"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://boomyao.github.io/" />
+    <link rel="canonical" href="https://boomyao.github.io/" />
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/assets/site.css" />
+    <script src="/assets/site.js" defer></script>
+    <title>boomyao 的工具箱</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#apps">跳到应用列表</a>
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="brand" href="/" aria-label="boomyao 工具箱首页"
+          ><span class="brand-symbol" aria-hidden="true">b.</span
+          ><span
+            >boomyao<span class="brand-divider">/</span
+            ><span class="brand-label">工具箱</span></span
+          ></a
+        >
+        <a class="source-link" href="{{REPOSITORY}}" target="_blank" rel="noreferrer"
+          >GitHub <span aria-hidden="true">↗</span></a
+        >
+      </header>
+      <main id="apps">
+        <div class="intro">
+          <div>
+            <p class="eyebrow">SMALL TOOLS, EVERYDAY USE</p>
+            <h1>让小事，简单一点。</h1>
+            <p class="intro-copy">我做的小应用，集中放在这里。挑一个，直接开始。</p>
+          </div>
+          <div class="collection-count"><span>{{APP_COUNT}}</span>个可用应用</div>
+        </div>
+        <div class="section-heading">
+          <h2>全部应用</h2>
+          <span>独立使用 · 链接分享</span>
+        </div>
+        <div class="app-list">{{APP_CARDS}}</div>
+        <p class="sharing-note">
+          <span aria-hidden="true">↗</span> 每个应用都有独立地址。分享链接，朋友就能直接打开。
+        </p>
+      </main>
+      <footer class="site-footer">
+        <span>Made by boomyao</span><span>把想法做出来，慢慢打磨。</span>
+      </footer>
+    </div>
+    <div id="share-feedback" class="toast" role="status" aria-live="polite" hidden></div>
+    <dialog id="share-dialog">
+      <form method="dialog"><button class="dialog-close" aria-label="关闭">×</button></form>
+      <h2>分享应用</h2>
+      <p>复制下面的地址，发给朋友即可。</p>
+      <label for="share-url">应用链接</label><input id="share-url" readonly type="url" /><button
+        class="dialog-select"
+        type="button"
+      >
+        选中链接
+      </button>
+    </dialog>
+  </body>
+</html>

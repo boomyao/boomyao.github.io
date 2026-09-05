@@ -1,0 +1,16 @@
+[
+  {
+    "slug": "legato",
+    "name": "顺奏",
+    "subtitle": "Legato",
+    "category": "音视频",
+    "description": "把演奏中的停顿与拖拍整理得更连贯。导入视频，试听确认，再导出你的演奏。",
+    "detail": "自动整理节奏 · 疑难片段试听 · 视频导出",
+    "privacy": "视频在本机处理",
+    "compatibility": "建议在电脑上使用 Chrome 或 Edge",
+    "status": "试用版",
+    "icon": "favicon.svg",
+    "build": "vite",
+    "updated": "2026-09-05"
+  }
+]

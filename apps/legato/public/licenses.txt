@@ -1,0 +1,22 @@
+Legato / 顺奏
+Application source: GNU General Public License v2 (GPL-2.0).
+The complete application source and dependency lockfile are available at /source.zip.
+
+Rubber Band WebAssembly 3.3.0
+https://github.com/Daninet/rubberband-wasm
+Rubber Band Library: https://breakfastquay.com/rubberband/
+GPL-2.0. Copyright Particular Programs Ltd. and Dani Biro.
+
+Mediabunny 1.55.7
+https://github.com/Vanilagy/mediabunny
+Mozilla Public License 2.0.
+
+fft.js 4.0.4
+https://github.com/indutny/fft.js
+MIT License.
+
+React, Vite, Tailwind CSS, Lucide and Base UI: MIT License.
+Exact versions and remaining build dependencies are recorded in package-lock.json.
+
+This application processes selected media locally. It has no media upload endpoint,
+remote inference call, telemetry, or server-side media processing.
