@@ -41,7 +41,7 @@ for (const app of apps) {
       (f) => f.startsWith(path.join(destination, "apps", app.slug)) && f.endsWith(".js"),
     )) {
       const js = await readFile(file, "utf8");
-      for (const match of js.matchAll(/["'](\/apps\/[^"'\s]+\.(?:js|wasm|css))["']/g))
+      for (const match of js.matchAll(/["'`](\/apps\/[^"'`\s]+\.(?:js|wasm|css))["'`]/g))
         await exists(match[1]);
       if (/new Worker\([^;]*file:\/\//.test(js))
         throw new Error(`${app.name} Worker 包含 file URL。`);
